@@ -1,0 +1,74 @@
+#!/usr/bin/env node
+
+const https = require("https");
+const fs = require("fs");
+const http = require("http");
+const path = require("path");
+const httpProxy = require("http-proxy");
+
+const PORT = process.env.PORT || 443;
+const cert = process.env.CERT_LOC || path.join(process.env.HOME,"cert");
+
+// Creating object of key and certificate
+// for SSL
+const options = {
+  key: fs.readFileSync(path.join(cert, "cert.key")),
+  cert: fs.readFileSync(path.join(cert, "cert.crt")),
+};
+
+const proxy = httpProxy.createProxyServer(); // See (†)
+
+const servers = {
+  ansible: {
+    host: "192.168.0.10",
+    port: 3000,
+  },
+  "w-tank": {
+    host: "192.168.0.50",
+    port: 80,
+  },
+  "w-motor": {
+    host: "192.168.0.149",
+    port: 80,
+  },
+};
+
+function onRequest(client_req, client_res) {
+  let domain = client_req.headers.host,
+    subDomain = domain.split(".");
+
+  if (subDomain.length > 2) {
+    subDomain = subDomain[0];
+  } else {
+    subDomain = "Everyone ";
+  }
+
+  console.log(`Request received from ${subDomain} at ${new Date()}`);
+
+  if (!servers[subDomain]) {
+    console.log(`Unknown -  ${client_req.method} ${client_req.url}`);
+
+    client_res.writeHead(404, { "Content-Type": "text/plain" });
+    client_res.write("404 Application Not Found\n");
+    client_res.end();
+    return;
+  }
+
+  const { host, port } = servers[subDomain];
+
+  console.log(
+    `${subDomain} -  ${client_req.method} http://${host}:${port}${client_req.url}`
+  );
+
+  proxy.web(client_req, client_res, {
+    target: `http://${host}:${port}`,
+    ws: true,
+    changeOrigin: true,
+  });
+}
+
+// Create the HTTPS proxy server in front of a HTTP server
+
+https.createServer(options, onRequest).listen(PORT, function (req, res) {
+  console.log("Server started at port " + PORT);
+});
