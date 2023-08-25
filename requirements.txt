@@ -1,0 +1,5 @@
+sqlalchemy
+flask
+sqlalchemy_utils
+PyYaml
+gevent

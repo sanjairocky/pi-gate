@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Email Alert</title>
+    <style>
+      /* Style for the alert box */
+      .alert {
+        padding: 20px;
+        text-align: center;
+        font-weight: bold;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+
+      /* Style for the warning status */
+      .warning {
+        background-color: #ffa500 !important; /* Orange color for warning */
+        color: white;
+      }
+
+      .success {
+        background-color: green !important;
+        color: white;
+      }
+
+      /* Style for the danger status */
+      .danger {
+        background-color: #ff0000 !important; /* Red color for danger */
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Feeds Summary</h1>
+    {% if danger or warning or success %} {% if danger is defined and danger %}
+    <h3>Critical : {{danger|length}}</h3>
+    <table cellpadding="0" cellspacing="0" border="1">
+      <tr>
+        <th>Source</th>
+        <th>Country</th>
+        <th>Last Recieved</th>
+        <th>Threshold (Days)</th>
+        <th>Status</th>
+      </tr>
+      {% for source, country, status, last_received, freq in danger %}
+      <tr>
+        <td>{{ source }}</td>
+        <td>{{ country }}</td>
+        <td>{{last_received}}</td>
+        <td>{{freq}}</td>
+        <td class="danger">
+          {% if status == 1 %} YES {% else %} NO {% endif%}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %} {% if warning is defined and warning %}
+    <h3>Warning : {{warning|length}}</h3>
+    <table cellpadding="0" cellspacing="0" border="1">
+      <tr>
+        <th>Source</th>
+        <th>Country</th>
+        <th>Last Recieved</th>
+        <th>Threshold (Days)</th>
+        <th>Status</th>
+      </tr>
+      {% for source, country, status, last_received, freq in warning %}
+      <tr>
+        <td>{{ source }}</td>
+        <td>{{ country }}</td>
+        <td>{{last_received}}</td>
+        <td>{{freq}}</td>
+        <td class="warning">
+          {% if status == 1 %} YES {% else %} NO {% endif%}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %} {% if success is defined and success %}
+    <h3>Success : {{success|length}}</h3>
+    <table cellpadding="0" cellspacing="0" border="1">
+      <tr>
+        <th>Source</th>
+        <th>Country</th>
+        <th>Last Recieved</th>
+        <th>Threshold (Days)</th>
+        <th>Status</th>
+      </tr>
+      {% for source, country, status, last_received, freq in success %}
+      <tr>
+        <td>{{ source }}</td>
+        <td>{{ country }}</td>
+        <td>{{last_received}}</td>
+        <td>{{freq}}</td>
+        <td class="success">YES</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %} {% else%}
+    <p>No summary found</p>
+    {% endif %}
+  </body>
+</html>
