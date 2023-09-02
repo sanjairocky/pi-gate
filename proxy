@@ -7,7 +7,8 @@ const path = require("path");
 const httpProxy = require("http-proxy");
 
 const PORT = process.env.PORT || 443;
-const cert = process.env.CERT_LOC || path.join(process.env.HOME,"cert");
+const cert = process.env.CERT_LOC || path.join("/secrets", "cert");
+const servers_location = process.env.SERVERS_LOC || "./servers.json";
 
 // Creating object of key and certificate
 // for SSL
@@ -18,23 +19,10 @@ const options = {
 
 const proxy = httpProxy.createProxyServer(); // See (†)
 
-const servers = {
-  ansible: {
-    host: "192.168.0.10",
-    port: 3000,
-  },
-  "w-tank": {
-    host: "192.168.0.50",
-    port: 80,
-  },
-  "w-motor": {
-    host: "192.168.0.149",
-    port: 80,
-  },
-};
+const servers = require(servers_location);
 
-function onRequest(client_req, client_res) {
-  let domain = client_req.headers.host,
+const getServer = (req) => {
+  let domain = req.headers.host,
     subDomain = domain.split(".");
 
   if (subDomain.length > 2) {
@@ -46,29 +34,52 @@ function onRequest(client_req, client_res) {
   console.log(`Request received from ${subDomain} at ${new Date()}`);
 
   if (!servers[subDomain]) {
-    console.log(`Unknown -  ${client_req.method} ${client_req.url}`);
+    console.log(`Unknown -  ${req.method} ${req.url}`);
+    throw new Error("Unknown subdomain");
+  }
+  return { subDomain, ...servers[subDomain] };
+};
 
+function onRequest(client_req, client_res) {
+  try {
+    const { subDomain, host, port } = getServer(client_req);
+    console.log(
+      `${subDomain} -  ${client_req.method} http://${host}:${port}${client_req.url}`
+    );
+
+    proxy.web(client_req, client_res, {
+      target: `http://${host}:${port}`,
+      ws: true,
+      changeOrigin: true,
+    });
+  } catch (error) {
+    console.log(error);
     client_res.writeHead(404, { "Content-Type": "text/plain" });
     client_res.write("404 Application Not Found\n");
     client_res.end();
-    return;
   }
+}
 
-  const { host, port } = servers[subDomain];
+// Listen for the `error` event on `proxy`.
+proxy.on("error", function (err, req, res) {
+  res.writeHead(500, { "Content-Type": "text/plain" });
+  res.write("Application Error\n");
+  res.end();
+});
 
-  console.log(
-    `${subDomain} -  ${client_req.method} http://${host}:${port}${client_req.url}`
-  );
+// Create the HTTPS proxy server in front of a HTTP server
 
-  proxy.web(client_req, client_res, {
+const server = https.createServer(options, onRequest);
+
+server.on("upgrade", function (req, socket, head) {
+  const { host, port } = getServer(req);
+  proxy.ws(req, socket, head, {
     target: `http://${host}:${port}`,
     ws: true,
     changeOrigin: true,
   });
-}
+});
 
-// Create the HTTPS proxy server in front of a HTTP server
-
-https.createServer(options, onRequest).listen(PORT, function (req, res) {
+server.listen(PORT, function () {
   console.log("Server started at port " + PORT);
 });
