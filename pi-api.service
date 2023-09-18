@@ -7,7 +7,7 @@ User=sanjai
 AmbientCapabilities=CAP_NET_BIND_SERVICE
 Type=simple
 Restart=always
-ExecStart=node /git/pi-gate/proxy
+ExecStart=/usr/bin/python3 /git/pi-gate/main.py
 
 [Install]
 WantedBy=multi-user.target
