@@ -5,14 +5,14 @@
 replicaCount: 1
 
 image:
-  repository: pi-gate
-  pullPolicy: Never
+  repository: sanjai/pi-gate
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "1.0.0"
 
 imagePullSecrets: []
 nameOverride: "pi-gate"
-fullnameOverride: "pi-gate-chart"
+fullnameOverride: "pi-gate"
 
 serviceAccount:
   # Specifies whether a service account should be created
