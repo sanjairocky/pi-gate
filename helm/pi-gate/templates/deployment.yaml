@@ -47,6 +47,26 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/secrets
+              name: secrets
+        - name: pi-tunnel
+          image: ngrok/ngrok:alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 4040
+          env:
+            - name: NGROK_CONFIG
+              value: /etc/secrets/ngrok.yml
+          volumeMounts:
+            - mountPath: /etc/secrets
+              name: secrets
+      volumes:
+        - name: secrets
+          hostPath:
+            path: /etc/secrets
+            type: DirectoryOrCreate
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
