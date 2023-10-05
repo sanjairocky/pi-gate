@@ -6,7 +6,7 @@ engines = {}
 current_e = []
 
 
-def gen_session(url="sqlite:///anomaly.db") -> scoped_session:
+def gen_session(url=get_env_variable("datasource.url", "sqlite:///anomaly.db")) -> scoped_session:
     if url not in engines:
         engine = create_engine(
             str(url), echo=get_env_variable('log.verbose', False))

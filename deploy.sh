@@ -1,6 +1,4 @@
-docker image rm sanjai/pi-gate:1.0.0
-
-docker build . -t sanjai/pi-gate:1.0.0
+docker build . -t sanjai/pi-gate:1.0.0 --build-arg CACHEBUST=$(date +%s)
 
 docker image push sanjai/pi-gate:1.0.0
 
