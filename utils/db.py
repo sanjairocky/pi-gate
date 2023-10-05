@@ -6,7 +6,7 @@ engines = {}
 current_e = []
 
 
-def gen_session(url=get_env_variable("datasource.url", "sqlite:///anomaly.db")) -> scoped_session:
+def gen_session(url=get_env_variable("datasource.url", "sqlite:///pi-gate.db")) -> scoped_session:
     if url not in engines:
         engine = create_engine(
             str(url), echo=get_env_variable('log.verbose', False))
@@ -17,9 +17,3 @@ def gen_session(url=get_env_variable("datasource.url", "sqlite:///anomaly.db")) 
         current_e.append(engine)
         engines[url] = session
     return engines[url]
-
-
-with gen_session() as con:
-    with open("tables.sql") as file:
-        for sql in file.read().split(';'):
-            con.execute(text(sql))

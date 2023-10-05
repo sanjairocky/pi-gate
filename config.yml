@@ -1,3 +1,5 @@
 FLASK_ENV: development
 log:
   verbose: False
+bot:
+  token: cd

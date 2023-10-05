@@ -35,6 +35,15 @@ app.register_blueprint(api)
 if __name__ == "__main__":
     port = int(get_env_variable('PORT', '8080'))
     load_config()
+    from utils.db import gen_session, current_e
+    # from sqlalchemy import text
+    # with gen_session() as con:
+    #     with open("tables.sql") as file:
+    #         for sql in file.read().split(';'):
+    #             con.execute(text(sql))
+    from models import BaseModel
+    gen_session()
+    BaseModel.metadata.create_all(bind=current_e[0])
     if get_env_variable("FLASK_ENV") == 'production':
         # Production
         http_server = WSGIServer(('', port), app)
