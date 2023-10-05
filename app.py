@@ -1,9 +1,10 @@
 from flask import Flask, jsonify
-from datetime import datetime
 from werkzeug.exceptions import HTTPException
 from gevent.pywsgi import WSGIServer
 from utils.env import load_config, get_env_variable
 import traceback
+from routes import api
+from service.BotService import BotService
 import warnings
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -13,10 +14,7 @@ app = Flask(__name__)
 
 app.url_map.strict_slashes = False
 
-
-@app.route('/')
-def health_check():
-    return "Api is up and running :)", 200
+bot = BotService()
 
 
 @app.errorhandler(Exception)
@@ -31,6 +29,8 @@ def handle_error(e):
         return jsonify(error="Internal Server Error"), code
     return jsonify(error=str(e)), code
 
+
+app.register_blueprint(api)
 
 if __name__ == "__main__":
     port = int(get_env_variable('PORT', '8080'))

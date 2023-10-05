@@ -1,0 +1,7 @@
+helm
+env
+.vscode
+*.sh
+Dockerfile
+*.md
+*pycache*

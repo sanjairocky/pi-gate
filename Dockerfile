@@ -5,6 +5,8 @@ FROM python:${PY_VER}
 ENV FLASK_ENV=production \
     PORT=8080
 
+WORKDIR /app
+
 COPY . .
 
 RUN pip install -r requirements.txt

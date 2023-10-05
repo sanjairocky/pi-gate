@@ -50,6 +50,9 @@ spec:
           volumeMounts:
             - mountPath: /etc/secrets
               name: secrets
+          env:
+            - name: CONFIG_FILE_LOCATION
+              value: /etc/secrets/pi-gate.yml
         - name: pi-tunnel
           image: ngrok/ngrok:alpine
           imagePullPolicy: IfNotPresent
