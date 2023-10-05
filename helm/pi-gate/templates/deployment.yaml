@@ -50,6 +50,8 @@ spec:
           volumeMounts:
             - mountPath: /etc/secrets
               name: secrets
+            - mountPath: /app/db
+              name: db
           env:
             - name: CONFIG_FILE_LOCATION
               value: /etc/secrets/pi-gate.yml
@@ -69,6 +71,10 @@ spec:
         - name: secrets
           hostPath:
             path: /etc/secrets
+            type: DirectoryOrCreate
+        - name: db
+          hostPath:
+            path: /db
             type: DirectoryOrCreate
       {{- with .Values.nodeSelector }}
       nodeSelector:

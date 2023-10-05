@@ -9,6 +9,8 @@ WORKDIR /app
 
 COPY . .
 
+RUN chmod 777 /app/
+
 RUN pip install -r requirements.txt
 
 USER 10000
