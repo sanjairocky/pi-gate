@@ -1,0 +1,26 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Projects</title>
+  </head>
+  <body>
+    {% include "header.html" %}
+    <h1>Projects</h1>
+    <a href="{{ url_for('root.ci.create_project') }}">Create New Project</a>
+    <ul>
+      {% for project in projects %}
+      <li>
+        <h2>
+          <a
+            href="{{ url_for('root.ci.project_detail', project_id=project['id']) }}"
+            >{{ project['name'] }}</a
+          >
+        </h2>
+        <p>{{ project['description'] }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+    {% include "footer.html" %}
+  </body>
+</html>

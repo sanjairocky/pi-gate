@@ -10,5 +10,5 @@ class User(BaseModel):
     mobile = Column(String(10), nullable=False, unique=True)
 
     # Define relationships
-    user_store_roles = relationship('UserStoreRole', backref='user')
-    user_addresses = relationship('UserAddress', backref='user')
+    # user_store_roles = relationship('UserStoreRole', backref='user')
+    # user_addresses = relationship('UserAddress', backref='user')

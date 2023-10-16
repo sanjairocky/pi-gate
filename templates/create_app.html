@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create App for {{ project.name }}</title>
+  </head>
+  <body>
+    {% include "header.html" %}
+    <h1>Create App for {{ project.name }}</h1>
+    <form method="POST">
+      <label for="name">App Name:</label>
+      <input type="text" name="name" id="name" required /><br />
+      <label for="description">Description:</label>
+      <textarea name="description" id="description" required></textarea><br />
+      <label for="repository_url">Repository Url:</label>
+      <input
+        type="text"
+        name="repository_url"
+        id="repository_url"
+        required
+      /><br />
+      <!-- Add fields for description, repository_url -->
+      <label for="build_type">Build Type:</label>
+      <select id="build_type" name="build_type">
+        <option value="">Select a build type</option>
+        {% for build_type in build_types %}
+        <option value="{{ build_type }}">{{ build_type }}</option>
+        {% endfor %}</select
+      ><br />
+      <button type="submit">Create App</button>
+    </form>
+    <a href="{{url_for('root.ci.project_detail', project_id=project['id'])}}"
+      >Back to {{ project.name }} Apps</a
+    >
+    {% include "footer.html" %}
+  </body>
+</html>
