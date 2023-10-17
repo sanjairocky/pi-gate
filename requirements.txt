@@ -4,3 +4,4 @@ sqlalchemy_utils
 PyYaml
 gevent
 python-telegram-bot
+kubernetes

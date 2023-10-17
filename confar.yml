@@ -1,0 +1,15 @@
+name: build pi-gate
+id: 123
+
+flows:
+  default:
+    - name: docker build
+      shell:
+        # - sh -c docker build . -t sanjai/pi-gate:1.0.0 --build-arg CACHEBUST=$(date +%s)
+        - docker
+        - build
+        - .
+        - -t
+        - sanjai/pi-gate:1.0.0
+        - --build-arg
+        - CACHEBUST=$(date +%s)

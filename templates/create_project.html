@@ -1,21 +1,28 @@
-<!-- templates/create_project.html -->
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Create Project</title>
-  </head>
-  <body>
-    {% include "header.html" %}
-
-    <h1>Create Project</h1>
-    <form method="POST">
-      <label for="name">Project Name:</label>
-      <input type="text" name="name" id="name" required /><br />
-      <label for="description">Description:</label>
-      <textarea name="description" id="description" required></textarea><br />
-      <button type="submit">Create Project</button>
-    </form>
-    <a href="/">Back to Projects</a>
-    {% include "footer.html" %}
-  </body>
-</html>
+{% extends "base.html" %} {% block title %}Create Project{% endblock title %} {%
+block body %}
+<div class="d-flex flex-column justify-content-center align-items-center pt-3">
+  <h1>Create Project</h1>
+  <form method="POST" class="w-50">
+    <div class="mb-3">
+      <label for="name" class="form-label">Project Name:</label>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        class="form-control"
+        required
+      /><br />
+      <label for="description" class="form-label">Description:</label>
+      <textarea
+        name="description"
+        id="description"
+        class="form-control"
+        required
+      ></textarea>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a href="{{ url_for('root.ci.index') }}" class="btn btn-danger"> Cancel </a>
+  </form>
+</div>
+{% endblock body %}

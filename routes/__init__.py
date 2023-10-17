@@ -6,7 +6,7 @@ api = Blueprint('root', __name__, url_prefix='/')
 
 
 @api.get('/')
-def health_check():
+def index():
     return "Api is up and running :)", 200
 
 
