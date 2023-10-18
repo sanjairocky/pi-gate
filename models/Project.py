@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 from .Base import BaseModel
 from sqlalchemy.orm import relationship
 
@@ -9,6 +9,7 @@ class Project(BaseModel):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False)
     description = Column(String(1000))
+    active = Column(Boolean, nullable=False, default=True)
 
     apps = relationship('App', back_populates='project')
 

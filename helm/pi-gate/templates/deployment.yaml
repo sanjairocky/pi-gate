@@ -55,6 +55,8 @@ spec:
           env:
             - name: CONFIG_FILE_LOCATION
               value: /etc/secrets/pi-gate.yml
+            - name: KUBECONFIG
+              value : /etc/secrets/kube-config.yml
         - name: pi-tunnel
           image: ngrok/ngrok:alpine
           imagePullPolicy: IfNotPresent

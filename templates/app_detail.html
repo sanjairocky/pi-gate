@@ -10,4 +10,12 @@ endblock title %} {% block body %}
 <a href="{{ url_for('root.ci.project_detail', project_id=project.id) }}"
   >Back to {{ project.name }} Apps</a
 >
+<div class="d-flex justify-content-center">
+  <a
+    href="{{ url_for('root.ci.project_detail', project_id=project.id) }}"
+    class="btn btn-danger text-white"
+  >
+    Back
+  </a>
+</div>
 {% endblock body%}

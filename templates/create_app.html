@@ -1,36 +1,48 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Create App for {{ project.name }}</title>
-  </head>
-  <body>
-    {% include "header.html" %}
-    <h1>Create App for {{ project.name }}</h1>
-    <form method="POST">
-      <label for="name">App Name:</label>
-      <input type="text" name="name" id="name" required /><br />
-      <label for="description">Description:</label>
-      <textarea name="description" id="description" required></textarea><br />
-      <label for="repository_url">Repository Url:</label>
+{% extends "base.html" %} {% block title %}Create App{% endblock title %} {%
+block body %}
+<div class="d-flex flex-column justify-content-center align-items-center pt-3">
+  <h1>Create App</h1>
+  <form method="POST" class="w-50">
+    <div class="mb-3">
+      <label for="name" class="form-label">App Name:</label>
+      <input
+        type="text"
+        name="name"
+        class="form-control"
+        id="name"
+        required
+      /><br />
+      <label for="description" class="form-label">Description:</label>
+      <textarea
+        name="description"
+        class="form-control"
+        id="description"
+        required
+      ></textarea
+      ><br />
+      <label for="repository_url" class="form-label">Repository Url:</label>
       <input
         type="text"
         name="repository_url"
+        class="form-control"
         id="repository_url"
         required
       /><br />
-      <!-- Add fields for description, repository_url -->
-      <label for="build_type">Build Type:</label>
-      <select id="build_type" name="build_type">
+      <label for="build_type" class="form-label">Build Type:</label>
+      <select id="build_type" name="build_type" class="form-control" required>
         <option value="">Select a build type</option>
         {% for build_type in build_types %}
         <option value="{{ build_type }}">{{ build_type }}</option>
-        {% endfor %}</select
-      ><br />
-      <button type="submit">Create App</button>
-    </form>
-    <a href="{{url_for('root.ci.project_detail', project_id=project['id'])}}"
-      >Back to {{ project.name }} Apps</a
+        {% endfor %}
+      </select>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a
+      class="btn btn-danger"
+      href="{{url_for('root.ci.project_detail', project_id=project.id)}}"
+      >Cancel</a
     >
-    {% include "footer.html" %}
-  </body>
-</html>
+  </form>
+</div>
+{% endblock body %}

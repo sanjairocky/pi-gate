@@ -1,6 +1,5 @@
 {% extends "base.html" %} {% block title %}Projects{% endblock title %} {% block
 body %}
-
 <table class="table table-striped table-hover">
   <caption>
     this table contains user scoped namespaces
@@ -42,4 +41,9 @@ body %}
     {% endfor %}
   </tbody>
 </table>
+<div class="d-flex justify-content-center">
+  <a href="{{ url_for('root.ci.index') }}" class="btn btn-danger text-white">
+    Back
+  </a>
+</div>
 {% endblock body %}

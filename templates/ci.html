@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block title%}RcNp CI{% endblock title %} {% block
+body %}
+<div class="d-flex p-2">
+  {% for feature in features %}
+  <a
+    class="card text-decoration-none m-2"
+    style="width: 18rem"
+    href="{{feature.link | striptags }}"
+  >
+    <div class="card-body">
+      <h5 class="card-title d-flex align-items-center">
+        <span>{{feature.name | striptags}}</span>
+        <span class="material-icons fs-5 px-3"> open_in_new </span>
+      </h5>
+      <p class="card-text">{{feature.description | striptags}}</p>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+{% endblock body %}
