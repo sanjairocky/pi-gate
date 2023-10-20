@@ -1,0 +1,35 @@
+{% extends "base.html" %} {% block title %}Create Cluster{% endblock title %} {%
+block body %}
+<div class="d-flex flex-column justify-content-center align-items-center pt-3">
+  <h1>Create Cluster</h1>
+  <form method="POST" class="w-50">
+    <div class="mb-3">
+      <label for="name" class="form-label">Cluster:</label>
+      <input
+        type="text"
+        name="name"
+        class="form-control"
+        id="name"
+        required
+      /><br />
+      <label for="region_id" class="form-label">Region:</label>
+      <select id="region_id" name="region_id" class="form-control" required>
+        <option value="">Select a cluster region</option>
+        {% for region in regions %}
+        <option value="{{ region.id }}">{{ region.name }}</option>
+        {% endfor %}</select
+      ><br />
+      <label for="description" class="form-label">Description:</label>
+      <textarea
+        name="description"
+        id="description"
+        class="form-control"
+        required
+      ></textarea>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a class="btn btn-danger" href="{{url_for('root.ci.clusters')}}">Cancel</a>
+  </form>
+</div>
+{% endblock body %}

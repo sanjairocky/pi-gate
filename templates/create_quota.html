@@ -1,0 +1,50 @@
+{% extends "base.html" %} {% block title %}Create {{project.name}} Quota{%
+endblock title %} {% block body %}
+<div class="d-flex flex-column justify-content-center align-items-center pt-3">
+  <h1>Create {{project.name}} Quota</h1>
+  <form method="POST" class="w-50">
+    <div class="mb-3">
+      <label for="name" class="form-label">Name:</label>
+      <input type="text" name="name" class="form-control" id="name" required />
+      <br />
+      <label for="cluster" class="form-label">Cluster:</label>
+      <select id="cluster" name="cluster" class="form-control" required>
+        <option value="">Select a cluster region</option>
+        {% for cluster in clusters %}
+        <option value="{{ cluster.id }}">{{ cluster.name }}</option>
+        {% endfor %}</select
+      ><br />
+      <label for="cpu" class="form-label">CPU:</label>
+      <input
+        type="number"
+        name="cpu"
+        class="form-control"
+        id="cpu"
+        min="1"
+        max="500"
+        placeholder="in mili core"
+        required
+      />
+      <br />
+      <label for="memory" class="form-label">Memory:</label>
+      <input
+        type="number"
+        name="memory"
+        min="1"
+        max="500"
+        placeholder="in Mi"
+        class="form-control"
+        id="memory"
+        required
+      />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a
+      class="btn btn-danger"
+      href="{{url_for('root.ci.project_detail', project_id=project.id)}}"
+      >Cancel</a
+    >
+  </form>
+</div>
+{% endblock body %}

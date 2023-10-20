@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: "{{quota.name}}"
+spec:
+  hard:
+    requests.cpu: "{{quota.cpu}}m"
+    requests.memory: "{{quota.memory}}Mi"
+    limits.cpu: "{{quota.cpu}}m"
+    limits.memory: "{{quota.memory}}Mi"

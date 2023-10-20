@@ -1,0 +1,23 @@
+<div class="d-flex flex-column">
+  <div class="d-flex justify-content-around py-3">
+    <span>Suspend or Enable project</span>
+    <form
+      action="{{url_for('root.ci.project_detail', project_id=project.id)}}"
+      method="POST"
+      class="px-2"
+    >
+      <input
+        name="delete"
+        hidden
+        value="{% if project.active %}True{% else %}False{% endif %}"
+      />
+      <button
+        type="submit"
+        class="btn btn-{% if project.active %}danger{% else %}warning{% endif %} text-white d-flex align-items-center justify-content-around"
+      >
+        <span class="material-icons"> delete </span>{% if project.active
+        %}Suspend{% else %}Enable{% endif %}
+      </button>
+    </form>
+  </div>
+</div>

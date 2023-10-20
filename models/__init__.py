@@ -25,6 +25,9 @@ from .User import User
 # from .CouponCategory import CouponCategory
 from .Project import Project
 from .App import App
+from .Cluster import Cluster
+from .Quota import Quota
+from .Region import Region
 
 __all__ = [
     "BaseModel", "User",
@@ -40,6 +43,6 @@ __all__ = [
     # "ProductCategory", "Product", "ProductTag",
     # "RelatedProduct", "Category", "UserStoreDue",
     # "Coupon", "CouponCategory",
-    "Project", "App"
+    "Project", "App", "Cluster", "Quota", "Region"
 
 ]
