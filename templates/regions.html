@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% block title %}Regions{% endblock title %} {% block
+body %}
+<table class="table table-striped table-hover">
+  <caption>
+    this table contains user scoped namespaces
+  </caption>
+  <thead>
+    <tr>
+      <th scope="col">
+        <div class="d-flex align-items-center justify-content-between">
+          <a
+            href="{{ url_for('root.ci.index') }}"
+            class="text-decoration-none d-flex align-items-center justify-content-center"
+          >
+            <span class="material-icons"> navigate_before </span>
+            <span class="text-primary fs-3">Regions</span>
+          </a>
+          <div class="d-flex">
+            <a
+              href="{{ url_for('root.ci.create_region') }}"
+              class="btn btn-success text-white d-flex align-items-center justify-content-around"
+              ><span class="material-icons"> add </span>
+              Add
+            </a>
+          </div>
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for region in regions %}
+    <tr>
+      <td>
+        <a
+          class="d-flex justify-content-between text-decoration-none"
+          href="{{ url_for('root.ci.region_detail', region_id=region['id']) }}"
+        >
+          <div>
+            <h5>{{region.name}}</h5>
+            <p>{{region.description}}</p>
+          </div>
+          {% if region.active %}
+          <span class="material-icons text-success"> toggle_on </span>{% endif
+          %} {% if not region.active%}<span class="material-icons text-danger">
+            toggle_off </span
+          >{% endif %}
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock body %}

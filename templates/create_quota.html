@@ -1,11 +1,24 @@
 {% extends "base.html" %} {% block title %}Create {{project.name}} Quota{%
-endblock title %} {% block body %}
+endblock title %} {% block body %} {% if error %}
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    alert("{{error}}");
+  });
+</script>
+{% endif %}
 <div class="d-flex flex-column justify-content-center align-items-center pt-3">
   <h1>Create {{project.name}} Quota</h1>
   <form method="POST" class="w-50">
     <div class="mb-3">
       <label for="name" class="form-label">Name:</label>
-      <input type="text" name="name" class="form-control" id="name" required />
+      <input
+        type="text"
+        name="name"
+        class="form-control"
+        id="name"
+        pattern="^[a-zA-Z0-9-]*$"
+        required
+      />
       <br />
       <label for="cluster" class="form-label">Cluster:</label>
       <select id="cluster" name="cluster" class="form-control" required>

@@ -1,5 +1,11 @@
 {% extends "base.html" %} {% block title %}Create Cluster{% endblock title %} {%
-block body %}
+block body %} {% if error %}
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    alert("{{error}}");
+  });
+</script>
+{% endif %}
 <div class="d-flex flex-column justify-content-center align-items-center pt-3">
   <h1>Create Cluster</h1>
   <form method="POST" class="w-50">

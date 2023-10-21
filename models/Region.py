@@ -9,6 +9,7 @@ class Region(BaseModel):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False)
     description = Column(String(1000))
+    country = Column(String(2), nullable=False)
     active = Column(Boolean, nullable=False, default=True)
 
     clusters = relationship('Cluster', back_populates='region')

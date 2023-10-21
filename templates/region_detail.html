@@ -1,0 +1,19 @@
+{% extends "base.html" %} {% block title %}{{region.name}}{% endblock title %}
+{% block body %}
+<div class="p-3">
+  <div class="d-flex align-items-center justify-content-start pb-3">
+    <span class="material-icons"> navigate_before </span>
+    <a
+      class="text-primary d-flex flex-column px-2 text-decoration-none"
+      href="{{ url_for('root.ci.regions') }}"
+    >
+      <span class="fs-3">{{region.name}}</span>
+      <span class="fs-6 text-secondary">{{region.description}}</span>
+    </a>
+  </div>
+  <div>{{region}}</div>
+  <div>{% for cluster in region.clusters  %}
+    <siv>{{cluster}}</div>
+    {% endfor %}</div>
+</div>
+{% endblock body %}

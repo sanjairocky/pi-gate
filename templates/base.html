@@ -44,14 +44,16 @@
         <a class="navbar-brand" href="{{ url_for('root.ci.index') }}">RnCp</a>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% for nav in ['projects','clusters', 'regions'] %}
             <li class="nav-item">
               <a
                 class="nav-link active"
                 aria-current="page"
-                href="{{ url_for('root.ci.projects') }}"
-                >Projects</a
+                href="{{ url_for('root.ci.'+nav) }}"
+                >{{nav}}</a
               >
             </li>
+            {% endfor %}
           </ul>
           <form class="d-flex">
             <input

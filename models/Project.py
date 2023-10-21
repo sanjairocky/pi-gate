@@ -7,7 +7,7 @@ class Project(BaseModel):
     __tablename__ = 'project'  # Name of the database table
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(255), nullable=False)
+    name = Column(String(255), nullable=False, unique=True)
     description = Column(String(1000))
     active = Column(Boolean, nullable=False, default=True)
 

@@ -1,22 +1,15 @@
-{% extends "base.html" %} {% block title %}Create Project{% endblock title %} {%
-block body %} {% if error %}
-<script>
-  window.addEventListener("DOMContentLoaded", function () {
-    alert("{{error}}");
-  });
-</script>
-{% endif %}
+{% extends "base.html" %} {% block title %}Create Region{% endblock title %} {%
+block body %}
 <div class="d-flex flex-column justify-content-center align-items-center pt-3">
-  <h1>Create Project</h1>
+  <h1>Create Region</h1>
   <form method="POST" class="w-50">
     <div class="mb-3">
-      <label for="name" class="form-label">Project Name:</label>
+      <label for="name" class="form-label">Name:</label>
       <input
         type="text"
         name="name"
-        id="name"
-        pattern="^[a-zA-Z0-9-]*$"
         class="form-control"
+        id="name"
         required
       /><br />
       <label for="description" class="form-label">Description:</label>
@@ -26,12 +19,19 @@ block body %} {% if error %}
         class="form-control"
         required
       ></textarea>
+      <br />
+      <label for="country" class="form-label">Country:</label>
+      <input
+        type="text"
+        name="country"
+        class="form-control"
+        id="country"
+        required
+      />
     </div>
     <br />
     <button type="submit" class="btn btn-primary">Add</button>
-    <a href="{{ url_for('root.ci.projects') }}" class="btn btn-danger">
-      Cancel
-    </a>
+    <a class="btn btn-danger" href="{{url_for('root.ci.regions')}}">Cancel</a>
   </form>
 </div>
 {% endblock body %}

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, redirect, url_for, render_template
 from models import Project, App, Cluster, Quota, Region
 from kubernetes import config, client
-from utils.kube_templates import get_kube_template
+from utils.kube_templates import get_kube_template, sanitize_for_kube
 
 ci_api = Blueprint('ci', __name__,  url_prefix='ci')
 
@@ -13,7 +13,9 @@ def index():
                  'link': '/ci/projects'},
                 {'name': 'Clusters',
                  'description': "Manage connected clusters",
-                 'link': '/ci/clusters'}
+                 'link': '/ci/clusters'}, {'name': 'Regions',
+                'description': "Manage cluster regions",
+                                           'link': '/ci/regions'}
                 ]
     return render_template('ci.html', features=features)
 
@@ -30,6 +32,11 @@ def clusters():
     return render_template('clusters.html', clusters=Cluster.all())
 
 
+@ci_api.route('/regions')
+def regions():
+    return render_template('regions.html', regions=Region.all())
+
+
 build_types = ['docker', 'node']
 
 # Route for individual project pages
@@ -43,8 +50,17 @@ def project_detail(project_id):
         if request.method == 'POST':
             kubectl = client.CoreV1Api(
                 api_client=config.new_client_from_config())
-            if request.form['delete']:
-                delete = eval(request.form['delete'])
+            if 'delete' in request.form and request.form['delete']:
+                try:
+                    kubectl.delete_namespace(project.name)
+                except:
+                    pass
+                for quota in project.quotas:
+                    quota.delete()
+                project.delete()
+                return redirect("/ci/projects", code=302)
+            elif 'active' in request.form and request.form['active']:
+                delete = eval(request.form['active'])
                 if project.active and delete:
                     kubectl.delete_namespace(project.name)
                 elif not project.active and not delete:
@@ -55,7 +71,7 @@ def project_detail(project_id):
                         kubectl.create_namespaced_resource_quota(namespace=project.name, body=get_kube_template(
                             'create_quota.kube', project=project, quota=quota))
                 project.active = not delete
-            project.save()
+                project.save()
         return render_template('project_detail.html', project=project)
     return redirect("/ci/projects", code=302)
 
@@ -89,31 +105,64 @@ def quota_detail(quota_id):
 
 @ci_api.route('/projects/create_project', methods=['GET', 'POST'])
 def create_project():
+    error = None
     if request.method == 'POST':
-        new_project = Project()
-        new_project.active = False
-        new_project.name = request.form['name']
-        new_project.description = request.form['description']
-        new_project.save()
-        return redirect(url_for('root.ci.projects'))
-    return render_template('create_project.html')
+        if Project.query.filter_by(
+                name=request.form['name']).first():
+            error = "Project already exists"
+        if len(sanitize_for_kube(request.form['name'])) != len(request.form['name']):
+            error = "name is not alpha numeric"
+        if not error:
+            new_project = Project()
+            new_project.active = False
+            new_project.name = request.form['name']
+            new_project.description = request.form['description']
+            new_project.save()
+            return redirect(url_for('root.ci.projects'))
+    return render_template('create_project.html', error=error)
+
+
+@ci_api.route('/regions/create_region', methods=['GET', 'POST'])
+def create_region():
+    if request.method == 'POST':
+        region = Region()
+        region.name = request.form['name']
+        region.description = request.form['description']
+        region.country = request.form['country']
+        region.save()
+        return redirect(url_for('root.ci.regions'))
+    return render_template('create_region.html', regions=Region.all())
+
+
+@ci_api.route('/regions/<int:region_id>', methods=['GET', 'POST'])
+def region_detail(region_id):
+    # Retrieve the specific project based on region_id
+    region: Region = Region.query.filter_by(id=region_id).first()
+    if region:
+        return render_template('region_detail.html', region=region)
+    return redirect("/ci/regions", code=302)
 
 
 @ci_api.route('/clusters/create_cluster', methods=['GET', 'POST'])
 def create_cluster():
+    error = None
     if request.method == 'POST':
-        cluster = Cluster()
-        cluster.name = request.form['name']
-        cluster.description = request.form['description']
-        cluster.region_id = request.form['region_id']
-        cluster.save()
-        return redirect(url_for('root.ci.clusters'))
-    return render_template('create_cluster.html', regions=Region.all())
+        if Cluster.query.filter_by(
+                name=request.form['name']).first():
+            error = "Cluster already exists"
+        if not error:
+            cluster = Cluster()
+            cluster.name = request.form['name']
+            cluster.description = request.form['description']
+            cluster.region_id = request.form['region_id']
+            cluster.save()
+            return redirect(url_for('root.ci.clusters'))
+    return render_template('create_cluster.html', regions=Region.all(), error=error)
 
 
 @ci_api.route('/clusters/<int:cluster_id>', methods=['GET', 'POST'])
 def cluster_detail(cluster_id):
-    # Retrieve the specific project based on project_id
+    # Retrieve the specific project based on cluster_id
     cluster: Cluster = Cluster.query.filter_by(id=cluster_id).first()
     if cluster:
         return render_template('cluster_detail.html', cluster=cluster)
@@ -152,6 +201,8 @@ def create_quota(project_id):
         if Quota.query.filter_by(
                 project_id=project_id, cluster_id=request.form['cluster']).first():
             error = "Quota already exists"
+        if len(sanitize_for_kube(request.form['name'])) != len(request.form['name']):
+            error = "name is not alpha numeric"
         if not error:
             quota = Quota()
             quota.project_id = project_id
