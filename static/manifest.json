@@ -37,8 +37,8 @@
       "label": "desktop view"
     }
   ],
-  "id": ".",
-  "start_url": ".",
+  "id": "/ci",
+  "start_url": "/ci",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"

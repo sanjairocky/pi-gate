@@ -5,3 +5,4 @@ PyYaml
 gevent
 python-telegram-bot
 kubernetes
+helm-python
