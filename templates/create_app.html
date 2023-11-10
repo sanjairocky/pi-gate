@@ -27,14 +27,7 @@ block body %}
         class="form-control"
         id="repository_url"
         required
-      /><br />
-      <label for="build_type" class="form-label">Build Type:</label>
-      <select id="build_type" name="build_type" class="form-control" required>
-        <option value="">Select a build type</option>
-        {% for build_type in build_types %}
-        <option value="{{ build_type }}">{{ build_type }}</option>
-        {% endfor %}
-      </select>
+      />
     </div>
     <br />
     <button type="submit" class="btn btn-primary">Add</button>

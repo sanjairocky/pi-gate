@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean
-from .Base import BaseModel
+from ..Base import BaseModel
 from sqlalchemy.orm import relationship
+import uuid
 
 
 class Project(BaseModel):
@@ -10,6 +11,8 @@ class Project(BaseModel):
     name = Column(String(255), nullable=False, unique=True)
     description = Column(String(1000))
     active = Column(Boolean, nullable=False, default=True)
+    api_key = Column(String(36), nullable=False,
+                     default=lambda: str(uuid.uuid4()))
 
     apps = relationship('App', back_populates='project')
 

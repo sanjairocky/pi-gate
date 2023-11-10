@@ -181,7 +181,6 @@ def create_app(project_id):
         new_app.name = request.form['name']
         new_app.description = request.form['description']
         new_app.repository_url = request.form['repository_url']
-        new_app.build_type = request.form['build_type']
         new_app.project = project
         new_app.save()
         return redirect(url_for('root.ci.project_detail', project_id=project_id))

@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, ForeignKey, Boolean, String
+from sqlalchemy import Column, Integer, Boolean, String
 from sqlalchemy.orm import relationship
-from .Base import BaseModel
+from ..Base import BaseModel
 
 
 class Region(BaseModel):

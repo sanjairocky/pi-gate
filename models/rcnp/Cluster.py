@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from .Base import BaseModel
+from ..Base import BaseModel
 from sqlalchemy.orm import relationship
+import uuid
 
 
 class Cluster(BaseModel):
@@ -13,6 +14,8 @@ class Cluster(BaseModel):
     cpu = Column(Integer)
     memory = Column(Integer)
     region_id = Column(Integer, ForeignKey('region.id'), nullable=False)
+    api_key = Column(String(36), nullable=False,
+                     default=lambda: str(uuid.uuid4()))
 
     region = relationship('Region', back_populates='clusters')
 

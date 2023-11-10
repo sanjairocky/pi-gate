@@ -23,11 +23,19 @@ from .User import User
 # from .UserStoreDue import UserStoreDue
 # from .Coupon import Coupon
 # from .CouponCategory import CouponCategory
-from .Project import Project
-from .App import App
-from .Cluster import Cluster
-from .Quota import Quota
-from .Region import Region
+from .rcnp.Project import Project
+from .rcnp.App import App
+from .rcnp.Cluster import Cluster
+from .rcnp.Quota import Quota
+from .rcnp.Region import Region
+from .rcnp.ProjectSecret import ProjectSecret
+from .rcnp.AppProfile import AppProfile
+from .rcnp.AppSecret import AppSecret
+from .rcnp.Artifactory import Artifactory
+from .rcnp.Pipeline import Pipeline
+from .rcnp.Secret import Secret
+from .rcnp.Stage import Stage
+from .rcnp.Profile import Profile
 
 __all__ = [
     "BaseModel", "User",
@@ -43,6 +51,7 @@ __all__ = [
     # "ProductCategory", "Product", "ProductTag",
     # "RelatedProduct", "Category", "UserStoreDue",
     # "Coupon", "CouponCategory",
-    "Project", "App", "Cluster", "Quota", "Region"
-
+    "Project", "App", "Cluster", "Quota", "Region",
+    "Profile", "ProjectSecret", "Stage", "Secret", "Pipeline",
+    "AppProfile", "AppSecret", "Artifactory"
 ]

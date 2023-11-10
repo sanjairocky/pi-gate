@@ -36,9 +36,26 @@ if __name__ == "__main__":
     port = int(get_env_variable('PORT', '8080'))
     load_config()
     from utils.db import gen_session, current_e
-    from models import BaseModel
+    from models import BaseModel, User, Cluster, Region
     gen_session()
     BaseModel.metadata.create_all(bind=current_e[0])
+    if not User.get_by_id(1):
+        u = User()
+        u.name = 'System'
+        u.mobile = '54325429'
+        u.save()
+    if not Region.get_by_id(1):
+        r = Region()
+        r.country = 'IN'
+        r.name = 'test'
+        r.description = ''
+        r.save()
+    if not Cluster.get_by_id(1):
+        c = Cluster()
+        c.name = 'test'
+        c.region_id = 1
+        c.description = ''
+        c.save()
     if get_env_variable("FLASK_ENV") == 'production':
         # Production
         http_server = WSGIServer(('', port), app)
