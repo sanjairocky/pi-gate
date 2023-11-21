@@ -36,6 +36,7 @@ from .rcnp.Pipeline import Pipeline
 from .rcnp.Secret import Secret
 from .rcnp.Stage import Stage
 from .rcnp.Profile import Profile
+from .rcnp.Activity import Activity
 
 __all__ = [
     "BaseModel", "User",
@@ -53,5 +54,6 @@ __all__ = [
     # "Coupon", "CouponCategory",
     "Project", "App", "Cluster", "Quota", "Region",
     "Profile", "ProjectSecret", "Stage", "Secret", "Pipeline",
-    "AppProfile", "AppSecret", "Artifactory"
+    "AppProfile", "AppSecret", "Artifactory",
+    "Activity"
 ]

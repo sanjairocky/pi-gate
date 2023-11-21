@@ -18,5 +18,7 @@ class Project(BaseModel):
 
     quotas = relationship('Quota', back_populates='project')
 
+    activities = relationship('Activity', back_populates='project')
+
     def __repr__(self):
         return f'<Project(id={self.id}, name="{self.name}", active={self.active}, description="{self.description}")>'

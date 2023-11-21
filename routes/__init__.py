@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, redirect
 from .git import git_api
 from .ci import ci_api
 
@@ -7,7 +7,7 @@ api = Blueprint('root', __name__, url_prefix='/')
 
 @api.get('/')
 def index():
-    return "Api is up and running :)", 200
+    return redirect("/ci", code=302)
 
 
 api.register_blueprint(git_api)

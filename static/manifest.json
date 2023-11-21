@@ -6,39 +6,39 @@
   ],
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "/static/favicon.ico",
       "sizes": "64x64",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "/static/logo192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "/static/logo512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "screenshots": [
     {
-      "src": "ss_1.png",
+      "src": "/static/ss_1.png",
       "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Mobile view"
     },
     {
-      "src": "ss_2.png",
+      "src": "/static/ss_2.png",
       "sizes": "1280x800",
       "type": "image/png",
       "form_factor": "wide",
       "label": "desktop view"
     }
   ],
-  "id": "/ci",
-  "start_url": "/ci",
+  "id": ".",
+  "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"

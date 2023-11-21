@@ -11,7 +11,8 @@ class Stage(BaseModel):
     name = Column(String(255), nullable=False)
     description = Column(String(1000))
     c_names = Column(String(255))
-    refs = Column(String(255), nullable=False)
+    order = Column(Integer, autoincrement=True)
+    refs = Column(String(255), nullable=False, default='main')
 
     app = relationship('App', back_populates='stages')
 

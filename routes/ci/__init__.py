@@ -1,7 +1,9 @@
 from flask import Blueprint, request, redirect, url_for, render_template
-from models import Project, App, Cluster, Quota, Region
+from models import Project, App, Cluster, Quota, Region, Stage, Secret, AppSecret, Pipeline
 from kubernetes import config, client
 from utils.kube_templates import get_kube_template, sanitize_for_kube
+
+from typing import List
 
 ci_api = Blueprint('ci', __name__,  url_prefix='ci')
 
@@ -225,3 +227,124 @@ def app_detail(project_id, app_id):
         return "App not found", 400
 
     return render_template('app_detail.html', project=project, app=app)
+
+
+@ci_api.route('/project/<int:project_id>/app/<int:app_id>/stages', methods=['GET', 'POST'])
+def create_stage(project_id, app_id):
+    project = Project.query.get(project_id)
+    error = None
+    if not project:
+        return "Project not found", 400
+    app = App.query.get(app_id)
+    if not app:
+        return "App not found", 400
+    if request.method == 'POST':
+        if Stage.query.filter_by(
+                app_id=app_id, quota_id=request.form['quota_id']).first():
+            error = "Stage already exists"
+        if not error:
+            stage = Stage()
+            stage.name = request.form['name']
+            stage.description = request.form['description']
+            stage.c_names = request.form['c_names']
+            stage.app_id = app_id
+            stage.quota_id = request.form['quota_id']
+            stage.refs = request.form['refs']
+            stage.save()
+            return redirect(url_for('root.ci.app_detail', project_id=project_id, app_id=app_id))
+    return render_template('create_stage.html', app=app, project=project, error=error)
+
+
+@ci_api.route('/project/<int:project_id>/app/<int:app_id>/stages/<int:quota_id>', methods=['DELETE'])
+def delete_stage(project_id, app_id, quota_id):
+    project: Project = Project.query.get(project_id)
+    if not project:
+        return "Project not found", 400
+    app: App = App.query.get(app_id)
+    if not app:
+        return "App not found", 400
+
+    stage: Stage = Stage.query.filter_by(
+        app_id=app_id, quota_id=quota_id).first()
+
+    if not stage:
+        return "stage not found", 404
+
+    stage.delete()
+
+    return "deleted", 200
+
+
+@ci_api.route('/project/<int:project_id>/app/<int:app_id>/secrets', methods=['GET', 'POST'])
+def create_secret(project_id, app_id):
+    project = Project.query.get(project_id)
+    error = None
+    if not project:
+        return "Project not found", 400
+    app = App.query.get(app_id)
+    if not app:
+        return "App not found", 400
+    if request.method == 'POST':
+        secret = Secret()
+        secret.name = request.form['name']
+        secret.value = request.form['value']
+        secret.save()
+        app_secret = AppSecret()
+        app_secret.app_id = app_id
+        app_secret.secret = secret
+        app_secret.mount_path = request.form['mount_path']
+        app_secret.base_path = request.form['base_path']
+        app_secret.target_name = request.form['target_name']
+        if request.form['env'] == 'True':
+            app_secret.env = True
+        else:
+            app_secret.env = False
+        app_secret.save()
+        return redirect(url_for('root.ci.app_detail', project_id=project_id, app_id=app_id))
+    return render_template('create_secret.html', app=app, project=project, error=error)
+
+
+@ci_api.route('/project/<int:project_id>/app/<int:app_id>/secrets/<int:secret_id>', methods=['DELETE'])
+def delete_secret(project_id, app_id, secret_id):
+    project: Project = Project.query.get(project_id)
+    if not project:
+        return "Project not found", 400
+    app: App = App.query.get(app_id)
+    if not app:
+        return "App not found", 400
+
+    secret: List(AppSecret) = list(filter(
+        lambda s: s.secret_id == secret_id, app.secrets))
+
+    if len(secret) > 0:
+        for s in secret:
+            s.secret.delete()
+            s.delete()
+
+    return "deleted", 200
+
+
+@ci_api.route('/project/<int:project_id>/app/<int:app_id>/deploy_app', methods=['GET'])
+def deploy_app(project_id, app_id):
+    project = Project.query.get(project_id)
+    if not project:
+        return "Project not found", 400
+    app = App.query.get(app_id)
+    if not app:
+        return "App not found", 400
+
+    for p in Pipeline.query.filter_by(app_id=app_id, version='latest', active=True):
+        p.active = False
+        p.save()
+
+    pipeline = Pipeline()
+    pipeline.app_id = app_id
+    pipeline.artifactory_id = 1
+    pipeline.build_skip = False
+    pipeline.deploy_skip = True
+    pipeline.active = True
+    pipeline.version = 'latest'
+    pipeline.artifact = f"{project.name}-{app.name}"
+    pipeline.log = ""
+    pipeline.save()
+    return redirect(url_for('root.ci.app_detail', project_id=project_id, app_id=app_id))

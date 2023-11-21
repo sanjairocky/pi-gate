@@ -1,0 +1,36 @@
+<table class="table table-hover">
+  <caption>
+    this table contains apps scoped builds : {{app.name}}
+  </caption>
+  <thead>
+    <tr>
+      <th scope="col">
+        <div class="d-flex align-items-center justify-content-between">
+          <span></span>
+          <a
+            href="{{ url_for('root.ci.deploy_app', project_id=project.id, app_id=app.id) }}"
+            class="btn d-flex btn-warning align-items-center justify-content-around"
+            ><span class="material-icons"> build </span> Deploy</a
+          >
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for pipeline in app.pipelines %}
+    <tr>
+      <td>
+        <a
+          class="d-flex justify-content-between text-decoration-none"
+          href="{{ url_for('root.ci.app_detail', project_id=project.id, app_id=app.id) }}"
+        >
+          <div>
+            <h5>{{pipeline.name}}</h5>
+            <p>{{pipeline}}</p>
+          </div>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

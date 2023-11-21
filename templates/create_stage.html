@@ -1,0 +1,67 @@
+{% extends "base.html" %} {% block title %}Create {{app.name}} Stage{% endblock
+title %} {% block body %} {% if error %}
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    alert("{{error}}");
+  });
+</script>
+{% endif %}
+<div class="d-flex flex-column justify-content-center align-items-center pt-3">
+  <h1>Create {{app.name}} Stage</h1>
+  <form method="POST" class="w-50">
+    <div class="mb-3">
+      <label for="name" class="form-label">Name:</label>
+      <input
+        type="text"
+        name="name"
+        class="form-control"
+        id="name"
+        pattern="^[a-zA-Z0-9-]*$"
+        required
+      />
+      <br />
+      <label for="description" class="form-label">Description:</label>
+      <textarea
+        name="description"
+        id="description"
+        class="form-control"
+        required
+      ></textarea>
+      <br />
+      <label for="quota_id" class="form-label">Quota:</label>
+      <select id="quota_id" name="quota_id" class="form-control" required>
+        <option value="">Select a Quota</option>
+        {% for quota in project.quotas %}
+        <option value="{{ quota.id }}">{{ quota.name }}</option>
+        {% endfor %}</select
+      ><br />
+      <label for="refs" class="form-label">Refs:</label>
+      <textarea
+        type="text"
+        name="refs"
+        class="form-control"
+        id="refs"
+        placeholder="seperated by newline"
+        required
+      ></textarea>
+      <br />
+      <label for="c_names" class="form-label">C Names:</label>
+      <textarea
+        type="text"
+        name="c_names"
+        placeholder="seperated by newline"
+        class="form-control"
+        id="c_names"
+        required
+      ></textarea>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a
+      class="btn btn-danger"
+      href="{{url_for('root.ci.app_detail', project_id=project.id, app_id=app.id)}}"
+      >Cancel</a
+    >
+  </form>
+</div>
+{% endblock body %}

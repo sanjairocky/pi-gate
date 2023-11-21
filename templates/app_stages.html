@@ -1,0 +1,41 @@
+<table class="table table-hover">
+  <caption>
+    this table contains apps scoped stages : {{app.name}}
+  </caption>
+  <thead>
+    <tr>
+      <th scope="col">
+        <div class="d-flex align-items-center justify-content-between">
+          <span></span>
+          <a
+            href="{{ url_for('root.ci.create_stage', project_id=project.id, app_id=app.id) }}"
+            class="btn d-flex btn-success align-items-center justify-content-around"
+            ><span class="material-icons"> add </span> Add</a
+          >
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for stage in app.stages %}
+    <tr>
+      <td class="d-flex justify-content-between text-primary">
+        <div>
+          <h5>{{stage.name}}</h5>
+          <p>{{stage.refs}}</p>
+          <p>{{stage.c_names}}</p>
+        </div>
+        <div>
+          <button
+            onclick="onDelete(this,'{{ url_for('root.ci.delete_stage', project_id=project.id, app_id=app.id, quota_id = stage.quota_id) }}')"
+            class="btn btn-danger text-white d-flex align-items-center justify-content-around"
+          >
+            <span class="material-icons"> delete </span>
+            Delete
+          </button>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

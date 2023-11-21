@@ -21,3 +21,11 @@ class App(BaseModel):
     project = relationship('Project', back_populates='apps')
 
     stages = relationship('Stage', back_populates='app')
+
+    activities = relationship('Activity', back_populates='app')
+
+    project_secrets = relationship('ProjectSecret', back_populates='app')
+
+    secrets = relationship('AppSecret', back_populates='app')
+
+    pipelines = relationship('Pipeline', back_populates='app')

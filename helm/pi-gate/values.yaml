@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: sanjai/pi-gate
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "1.0.0"
 
@@ -46,14 +46,14 @@ ingress:
   enabled: true
   className: "traefik"
   annotations:
-    {}
+    traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: rockypic.local
       paths:
-        - path: /
-          pathType: Prefix
+        - path: /ci
+          pathType: ImplementationSpecific
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:

@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 from ..Base import BaseModel
 
 
@@ -11,6 +12,10 @@ class ProjectSecret(BaseModel):
                     primary_key=True)
     project_id = Column(Integer, ForeignKey('project.id'),
                         primary_key=True)
+
+    secret = relationship('Secret')
+
+    app = relationship('App', back_populates='project_secrets')
 
     def __repr__(self):
         return f'<ProjectSecret(secret_id={self.secret_id}, app_id="{self.app_id}", project_id="{self.project_id}")>'
