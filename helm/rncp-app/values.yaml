@@ -1,4 +1,4 @@
-# Default values for rncp-app.
+# Default values for tunnel.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -16,7 +16,7 @@ fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: false
+  create: true
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
@@ -39,8 +39,6 @@ securityContext:
   # runAsUser: 1000
 
 service:
-  # Specifies whether a service should be created
-  create: false
   type: ClusterIP
   port: 80
 
