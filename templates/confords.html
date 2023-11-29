@@ -1,0 +1,61 @@
+{% extends "base.html" %} {% block title %}Confords{% endblock title %} {% block
+body %}
+
+<div class="d-flex justify-content-around">
+  <a class="card text-decoration-none m-2" style="width: 18rem">
+    <div class="card-body">
+      <h5 class="card-title d-flex align-items-center">
+        <span>Total Jobs</span>
+      </h5>
+      <p class="card-text">{{wf.jobs.total}}</p>
+    </div>
+  </a>
+  <a class="card text-decoration-none m-2" style="width: 18rem">
+    <div class="card-body">
+      <h5 class="card-title d-flex align-items-center">
+        <span>Running Jobs</span>
+      </h5>
+      <p class="card-text">{{wf.jobs.running}}</p>
+    </div>
+  </a>
+  <a class="card text-decoration-none m-2" style="width: 18rem">
+    <div class="card-body">
+      <h5 class="card-title d-flex align-items-center">
+        <span>Total Jobs</span>
+      </h5>
+      <p class="card-text">{{wf.jobs.total}}</p>
+    </div>
+  </a>
+  <a class="card text-decoration-none m-2" style="width: 18rem">
+    <div class="card-body">
+      <h5 class="card-title d-flex align-items-center">
+        <span>Running Tasks</span>
+      </h5>
+      <p class="card-text">{{wf.tasks.running}}</p>
+    </div>
+  </a>
+</div>
+<div class="m-3">
+  <table class="table table-striped table-hover border">
+    <caption>
+      this table contains user scoped namespaces
+    </caption>
+    <thead>
+      <tr>
+        {% for project in [1,2,3,4,5] %}
+        <th scope="col">vd</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for project in [1,2,3,4,5,6,7,8,9,10] %}
+      <tr>
+        {% for project in [1,2,3,4,5] %}
+        <td>vsdvfs</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock body %}

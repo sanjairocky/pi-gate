@@ -3,9 +3,13 @@ from models import Project, App, Cluster, Quota, Region, Stage, Secret, AppSecre
 from kubernetes import config, client
 from utils.kube_templates import get_kube_template, sanitize_for_kube
 
+from .workflows import conford_api
+
 from typing import List
 
 ci_api = Blueprint('ci', __name__,  url_prefix='ci')
+
+ci_api.register_blueprint(conford_api)
 
 
 @ci_api.get('/')
@@ -17,7 +21,10 @@ def index():
                  'description': "Manage connected clusters",
                  'link': '/ci/clusters'}, {'name': 'Regions',
                 'description': "Manage cluster regions",
-                                           'link': '/ci/regions'}
+                                           'link': '/ci/regions'},
+                {'name': 'Confords',
+                'description': "Manage App Confords",
+                 'link': '/ci/confords'}
                 ]
     return render_template('ci.html', features=features)
 

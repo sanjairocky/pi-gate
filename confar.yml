@@ -9,7 +9,7 @@ flows:
       skip: false
       shell: docker image push sanjai/pi-gate:1.0.0
     - name: docker image prune
-      skip: false
+      skip: true
       shell: docker image prune -a
     - name: helm uninstall
       shell: helm uninstall pi-gate -n pi-gate
